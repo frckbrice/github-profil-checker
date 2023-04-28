@@ -2,16 +2,16 @@
 //* a variable APIURL to easy the use
 const APIURL = "https://api.github.com/users/";
 
-//* call the 
+//* call the DOM objects
 const form = document.querySelector(".form");
 const search = document.querySelector(".searchinput");
 const profile = document.querySelector("#section2");
 
-// add events
-form.addEventListener("keyup", submitFn);
-// form.addEventListener("submit", submitFn);
+//* add events
+// form.addEventListener("keyup", submitFn);
+form.addEventListener("submit", submitFn);
 
-// a function to launch fire the search process for non empty username
+//* a function that fires the search process for non empty username
 function submitFn(e) {
   e.preventDefault();
   const user = search.value;
@@ -20,14 +20,14 @@ function submitFn(e) {
   }
 }
 
-// a function to get a user from API Github
+//* a function to get a user from API Github
 async function getUser(username) {
   try {
-    // need only object data "{ data }" from REST API response using axios which return data already stringified
+    //we need only object data "{ data }" from REST API response using axios which return data already stringified
     const { data } = await axios(APIURL + username);
     createUserProfile(data);
     getRepositories(username);
-    console.log(data);
+    console.log(data)
   } catch (error) {
     //to handle only the not found error
     if (error.response.status === 404){
@@ -36,7 +36,7 @@ async function getUser(username) {
   }
 }
 
-//a function to create a user profil
+//* A function to create and display a user profil
 function createUserProfile(user) {
   const userProfileFromHTML = `<div class="profil-info">
           <div class="div-image">
@@ -48,7 +48,7 @@ function createUserProfile(user) {
           </div>
           <div class="user-profil-info">
             <h2>${user.name}</h2>
-            <p>
+            <p style:"line-height: 1.2rem ;">
               ${user.bio}
             </p>
 
@@ -65,13 +65,13 @@ function createUserProfile(user) {
 }
 
 
-// function to handle errors
+//* function to handle errors
 function showError(msg) {
   const noSuchProfile = `<div class = "profil-info"><h1>${msg}</h1></div>`;
 profile.innerHTML = noSuchProfile;
 }
 
-//function to get repositories of the hint username
+//* function to get repository(ies) of the hint username
 async function getRepositories(username) {
   try {
     const {data} = await axios(APIURL + username+ '/repos');
@@ -81,6 +81,7 @@ async function getRepositories(username) {
   }
 }
 
+//* Function to add repos to the user profile after getting (it)them.
 function addReposToUserProfile (repos) {
   const reposContainer = document.querySelector(".div-for-repos");
 
