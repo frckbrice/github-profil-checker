@@ -1,5 +1,6 @@
 //* a variable APIURL to easy the use
 const APIURL = "https://api.github.com/users/";
+const APIURL2 = "https://api.github.com/repos/";
 
 //* call the DOM objects
 const form = document.querySelector(".form");
@@ -7,15 +8,15 @@ const search = document.querySelector(".searchinput");
 const profile = document.querySelector("#section2");
 
 //* add events
-form.addEventListener("keyup", submitFn);
-// form.addEventListener("submit", submitFn);
+// form.addEventListener("keyup", submitFn);
+form.addEventListener("submit", submitFn);
 
 //* a function that fires the search process for non empty username
 function submitFn(e) {
   e.preventDefault();
-  const user = search.value;
-  if (user) {
-    getUser(user);
+  const userName = search.value;
+  if (userName) {
+    getUser(userName);
   }
 }
 
@@ -100,10 +101,11 @@ function showError(msg) {
 async function getRepositories(username) {
   try {
     const { data } = await axios(APIURL + username + "/repos");
-    console.log(data);
+ console.log(data);
     addReposToUserProfile(data);
+   
   } catch (err) {
-    showError("Error fetching repositories of the hint username");
+    showError(`Error fetching repositories of the user ${username}`);
   }
 }
 
@@ -125,43 +127,49 @@ async function getRepositories(username) {
 
 //* Function to add repos to the user profile after getting (it)them. customize version 2
 function addReposToUserProfile(repos) {
+
+  const userName = search.value;
+
   repos.forEach((repo) => {
     const reposContainer = document.createElement("div");
     reposContainer.className = "div-for-repos";
 
     const repoName = document.createElement("h4");
     repoName.className = "repo-name";
-    repoName.textContent = repo.name;
+    repoName.textContent = "Repository name :" + " " + repo.name;
 
     const repoDescription = document.createElement("p");
     repoDescription.className = "repo-description";
-    repoDescription.textContent = repo.description;
+    repoDescription.textContent = "Description :" + " " + repo.description;
 
     const spanContainer = document.createElement("p");
-    repoDescription.className = "repo-description";
-    repoDescription.textContent = "☆ ";
-
+    spanContainer.className = "repo-description";
+    spanContainer.textContent = "☆ ";
     const repoStarsCount = document.createElement("span");
     repoStarsCount.className = "stars";
     repoStarsCount.textContent = repo.stargazers_count;
-
     const StarName = document.createElement("span");
-    StarName.textContent = "stars";
+    StarName.textContent = " stars";
 
     const repoUrl = document.createElement("p");
     repoUrl.className = "repo-url";
-    repoUrl.textContent = repo.html_url;
-    repoUrl.target = "_blank";
+    const linkToUrl = document.createElement("a");
+    linkToUrl.setAttribute("href", repo.html_url);
+    linkToUrl.textContent = repo.html_url;
+    linkToUrl.target = "_blank";
 
+    //* calling of the getRepoReadme function
+    const nameOfTheRepo = repo.name;
+    const linkToreadmeFile = getRepoReadme(userName, nameOfTheRepo);
     const repoReadme = document.createElement("p");
     repoReadme.className = "view-readme";
-
     const linkToReadme = document.createElement("a");
-    linkToReadme.setAttribute("href", repo.download_url);
+    linkToReadme.setAttribute("href", linkToreadmeFile);
     linkToReadme.textContent = "View Readme";
-    repoUrl.target = "_blank";
+    linkToReadme.target = "_blank";
 
     repoReadme.appendChild(linkToReadme);
+    repoUrl.appendChild(linkToUrl);
 
     spanContainer.appendChild(repoStarsCount);
     spanContainer.appendChild(StarName);
@@ -174,4 +182,16 @@ function addReposToUserProfile(repos) {
 
     profile.appendChild(reposContainer);
   });
+}
+
+//* function to fetch readme file for the given repository 
+async function getRepoReadme(userName,reponame) {
+  // e.preventDefault();
+  try {
+    const data = await axios(APIURL2 + userName + `/${reponame}` + "/readme");
+    console.log("in the reame function", data);
+    return data.download_url;
+  } catch (err) { 
+    alert(`Error fetching ${err} readme file.}`);
+  }
 }
