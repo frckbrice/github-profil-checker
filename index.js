@@ -93,7 +93,7 @@ function createUserProfile(user) {
 
 //* function to handle errors
 function showError(msg) {
-  const noSuchProfile = `<div class = "profil-info"><h1>${msg}</h1></div>`;
+  const noSuchProfile = `<div class = "profil-info profil"><h1>${msg}</h1></div>`;
   profile.innerHTML = noSuchProfile;
 }
 
@@ -128,8 +128,8 @@ async function getRepositories(username) {
 //* Function to add repos to the user profile after getting (it)them. customize version 2
 function addReposToUserProfile(repos) {
 
-  const userName = search.value;
-
+  const userName = search.value.trim();
+if (userName) {
   repos.forEach((repo) => {
     const reposContainer = document.createElement("div");
     reposContainer.className = "div-for-repos";
@@ -151,6 +151,8 @@ function addReposToUserProfile(repos) {
     const StarName = document.createElement("span");
     StarName.textContent = " stars";
 
+    console.log("after starname");
+
     const repoUrl = document.createElement("p");
     repoUrl.className = "repo-url";
     const linkToUrl = document.createElement("a");
@@ -158,16 +160,18 @@ function addReposToUserProfile(repos) {
     linkToUrl.textContent = repo.html_url;
     linkToUrl.target = "_blank";
 
+    console.log("in the function addReposToUserProfile");
     //* calling of the getRepoReadme function
-    const nameOfTheRepo = repo.name;
-    const linkToreadmeFile = getRepoReadme(userName, nameOfTheRepo);
+    const repname = repo.name;
+    
     const repoReadme = document.createElement("p");
     repoReadme.className = "view-readme";
     const linkToReadme = document.createElement("a");
-    linkToReadme.setAttribute("href", linkToreadmeFile);
+    getRepoReadme(linkToReadme, repname, userName);
     linkToReadme.textContent = "View Readme";
     linkToReadme.target = "_blank";
 
+    console.log("at the level of appendchild");
     repoReadme.appendChild(linkToReadme);
     repoUrl.appendChild(linkToUrl);
 
@@ -183,15 +187,17 @@ function addReposToUserProfile(repos) {
     profile.appendChild(reposContainer);
   });
 }
+}
 
 //* function to fetch readme file for the given repository 
-async function getRepoReadme(userName,reponame) {
-  // e.preventDefault();
+async function getRepoReadme(linkToReadme, repname, userName) {
   try {
-    const data = await axios(APIURL2 + userName + `/${reponame}` + "/readme");
-    console.log("in the reame function", data);
-    return data.download_url;
-  } catch (err) { 
-    alert(`Error fetching ${err} readme file.}`);
+    const { data } = await axios(`APIURL2${userName}/${repname}/readme`);
+    console.log("in the readme function", data);
+    linkToReadme.setAttribute("href", data.html_url);
+  } catch (err) {
+     if (err.response.status === 404) {
+      console.log('This repository dont have readme file')
+     }
   }
 }

@@ -73,6 +73,10 @@ h5 {
   align-items: center;
 }
 
+.profil {
+  color: #fff;
+}
+
 .avatar2 {
   border: 10px solid #6c757d;
   object-fit: cover;
