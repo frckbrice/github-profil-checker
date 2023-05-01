@@ -196,12 +196,9 @@ async function getRepoReadme(repo, OWNER) {
     linkToReadme.textContent = "View Readme";
     linkToReadme.target = "_blank";
     linkToReadme.href = data.html_url;
+
     repoReadme.appendChild(linkToReadme);
-
-    console.log("at the level of appendchild");
-
     reposContainer.appendChild(repoReadme);
-
     profile.appendChild(reposContainer);
   } catch (err) {
     if (err.response.status === 404) {
@@ -228,8 +225,6 @@ async function getRepoReadme(repo, OWNER) {
       const StarName = document.createElement("span");
       StarName.textContent = " stars";
 
-      console.log("after starname");
-
       const repoUrl = document.createElement("p");
       repoUrl.className = "repo-url";
       const linkToUrl = document.createElement("a");
@@ -238,23 +233,13 @@ async function getRepoReadme(repo, OWNER) {
       linkToUrl.target = "_blank";
 
       repoUrl.appendChild(linkToUrl);
-
-      console.log("404 err, starting level of readme");
-
-      //* call of the readme file from {data} object which is a property of readme object
+      //*no readme file
       const repoReadme = document.createElement("p");
       repoReadme.className = "view-readme";
       const linkToReadme = document.createElement("a");
       linkToReadme.textContent = "No Readme File";
 
-      console.log("404 err, read file");
-
       repoReadme.appendChild(linkToReadme);
-
-      console.log("404 err, at the level of appendchild");
-
-      reposContainer.appendChild(repoReadme);
-
       spanContainer.appendChild(repoStarsCount);
       spanContainer.appendChild(StarName);
 
@@ -262,10 +247,10 @@ async function getRepoReadme(repo, OWNER) {
       reposContainer.appendChild(repoDescription);
       reposContainer.appendChild(spanContainer);
       reposContainer.appendChild(repoUrl);
-
+      reposContainer.appendChild(repoReadme);
       profile.appendChild(reposContainer);
     } else if (err.response.status === 403) {
-      console.log(err, `ressource  not accessible`);
+      showError(err, `ressource  forbidden: X-rate-limit exceeded`);
     }
   }
 }
