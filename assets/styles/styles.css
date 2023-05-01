@@ -123,6 +123,7 @@ h5 {
   font-size: 14px;
   text-decoration: underline;
   color: #4885ed;
+  cursor: pointer;
 }
 
 a {

@@ -14,7 +14,7 @@ form.addEventListener("submit", submitFn);
 //* a function that fires the search process for non empty username
 function submitFn(e) {
   e.preventDefault();
-  const userName = search.value;
+  const userName = search.value.toString().trim();
   if (userName) {
     getUser(userName);
   }
@@ -28,10 +28,12 @@ async function getUser(username) {
     createUserProfile(data);
     getRepositories(username);
     console.log(data);
-  } catch (error) {
+  } catch (err) {
     //to handle only the not found error
-    if (error.response.status === 404) {
+    if (err.response.status === 404) {
       showError(`This profile doesn't exist. check another username`);
+    } else if (err.response.status === 403) {
+      showError(`403 error: Server refuses to give access to this ressources`);
     }
   }
 }
@@ -101,9 +103,8 @@ function showError(msg) {
 async function getRepositories(username) {
   try {
     const { data } = await axios(APIURL + username + "/repos");
- console.log(data);
+    console.log(data);
     addReposToUserProfile(data);
-   
   } catch (err) {
     showError(`Error fetching repositories of the user ${username}`);
   }
@@ -127,10 +128,26 @@ async function getRepositories(username) {
 
 //* Function to add repos to the user profile after getting (it)them. customize version 2
 function addReposToUserProfile(repos) {
+  const OWNER = search.value.toString().trim();
+  if (OWNER) {
+    repos.forEach((repo) => {
+      console.log("this is the repo", repo);
+      getRepoReadme(repo, OWNER);
+      console.log("after calling of the repo");
+    });
+  } else {
+    alert("No Empty username allowed");
+  }
+}
 
-  const userName = search.value.trim();
-if (userName) {
-  repos.forEach((repo) => {
+//* function to fetch readme file for the given repository
+async function getRepoReadme(repo, OWNER) {
+  console.log("in the getRepoReadme function");
+  try {
+    const { data } = await axios(
+      `https://api.github.com/repos/${OWNER}/${repo.name}/readme`
+    );
+    console.log("in the getRepoReadme function", data);
     const reposContainer = document.createElement("div");
     reposContainer.className = "div-for-repos";
 
@@ -160,19 +177,6 @@ if (userName) {
     linkToUrl.textContent = repo.html_url;
     linkToUrl.target = "_blank";
 
-    console.log("in the function addReposToUserProfile");
-    //* calling of the getRepoReadme function
-    const repname = repo.name;
-    
-    const repoReadme = document.createElement("p");
-    repoReadme.className = "view-readme";
-    const linkToReadme = document.createElement("a");
-    getRepoReadme(linkToReadme, repname, userName);
-    linkToReadme.textContent = "View Readme";
-    linkToReadme.target = "_blank";
-
-    console.log("at the level of appendchild");
-    repoReadme.appendChild(linkToReadme);
     repoUrl.appendChild(linkToUrl);
 
     spanContainer.appendChild(repoStarsCount);
@@ -182,22 +186,86 @@ if (userName) {
     reposContainer.appendChild(repoDescription);
     reposContainer.appendChild(spanContainer);
     reposContainer.appendChild(repoUrl);
+
+    console.log("starting level of readme");
+
+    //* call of the readme file from {data} object which is a property of readme object
+    const repoReadme = document.createElement("p");
+    repoReadme.className = "view-readme";
+    const linkToReadme = document.createElement("a");
+    linkToReadme.textContent = "View Readme";
+    linkToReadme.target = "_blank";
+    linkToReadme.href = data.html_url;
+    repoReadme.appendChild(linkToReadme);
+
+    console.log("at the level of appendchild");
+
     reposContainer.appendChild(repoReadme);
 
     profile.appendChild(reposContainer);
-  });
-}
-}
-
-//* function to fetch readme file for the given repository 
-async function getRepoReadme(linkToReadme, repname, userName) {
-  try {
-    const { data } = await axios(`APIURL2${userName}/${repname}/readme`);
-    console.log("in the readme function", data);
-    linkToReadme.setAttribute("href", data.html_url);
   } catch (err) {
-     if (err.response.status === 404) {
-      console.log('This repository dont have readme file')
-     }
+    if (err.response.status === 404) {
+      console.log(
+        `The repository  ${repo.name} of user ${OWNER} dont have readme file`
+      );
+      const reposContainer = document.createElement("div");
+      reposContainer.className = "div-for-repos";
+
+      const repoName = document.createElement("h4");
+      repoName.className = "repo-name";
+      repoName.textContent = "Repository name :" + " " + repo.name;
+
+      const repoDescription = document.createElement("p");
+      repoDescription.className = "repo-description";
+      repoDescription.textContent = "Description :" + " " + repo.description;
+
+      const spanContainer = document.createElement("p");
+      spanContainer.className = "repo-description";
+      spanContainer.textContent = "☆ ";
+      const repoStarsCount = document.createElement("span");
+      repoStarsCount.className = "stars";
+      repoStarsCount.textContent = repo.stargazers_count;
+      const StarName = document.createElement("span");
+      StarName.textContent = " stars";
+
+      console.log("after starname");
+
+      const repoUrl = document.createElement("p");
+      repoUrl.className = "repo-url";
+      const linkToUrl = document.createElement("a");
+      linkToUrl.setAttribute("href", repo.html_url);
+      linkToUrl.textContent = repo.html_url;
+      linkToUrl.target = "_blank";
+
+      repoUrl.appendChild(linkToUrl);
+
+      console.log("404 err, starting level of readme");
+
+      //* call of the readme file from {data} object which is a property of readme object
+      const repoReadme = document.createElement("p");
+      repoReadme.className = "view-readme";
+      const linkToReadme = document.createElement("a");
+      linkToReadme.textContent = "No Readme File";
+
+      console.log("404 err, read file");
+
+      repoReadme.appendChild(linkToReadme);
+
+      console.log("404 err, at the level of appendchild");
+
+      reposContainer.appendChild(repoReadme);
+
+      spanContainer.appendChild(repoStarsCount);
+      spanContainer.appendChild(StarName);
+
+      reposContainer.appendChild(repoName);
+      reposContainer.appendChild(repoDescription);
+      reposContainer.appendChild(spanContainer);
+      reposContainer.appendChild(repoUrl);
+
+      profile.appendChild(reposContainer);
+    } else if (err.response.status === 403) {
+      console.log(err, `ressource  not accessible`);
+    }
   }
 }
