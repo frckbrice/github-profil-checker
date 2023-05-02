@@ -1,6 +1,6 @@
 //* a variable APIURL to easy the use
 const APIURL = "https://api.github.com/users/";
-const APIURL2 = "https://api.github.com/repos/";
+
 
 //* call the DOM objects
 const form = document.querySelector(".form");
@@ -37,34 +37,6 @@ async function getUser(username) {
     }
   }
 }
-
-//* A function to create and display a user profil. version 1
-// function createUserProfile(user) {
-//   const userProfileFromHTML = `<div class="profil-info">
-//           <div class="div-image">
-//             <img
-//               src="${user.avatar_url}"
-//               alt="${user.name}"
-//               class="avatar2"
-//             />
-//           </div>
-//           <div class="user-profil-info">
-//             <h2>${user.name}</h2>
-//             <p style:"line-height: 1.2rem ;">
-//               ${user.bio}
-//             </p>
-
-//             <div class="info-followers-repos">
-//               <p>${user.followers}<strong> Followers</strong></p>
-//               <p>${user.following}<strong> Following</strong></p>
-//               <p>${user.public_repos}<strong> Repos</strong></p>
-//             </div>
-//               <div class="div-for-repos"></div>
-//           </div>
-//         </div>`;
-
-//   profile.innerHTML = userProfileFromHTML;
-// }
 
 //* A function to create and display a user profil. version 2
 function createUserProfile(user) {
@@ -109,22 +81,6 @@ async function getRepositories(username) {
     showError(`Error fetching repositories of the user ${username}`);
   }
 }
-
-//* Function to add repos to the user profile after getting (it)them. version 1
-// function addReposToUserProfile(repos) {
-//   const reposContainer = document.querySelector(".div-for-repos");
-
-//   repos.forEach((repo) => {
-//     const repoItem = document.createElement("a");
-//     repoItem.className = "repos-link";
-//     repoItem.href = repo.html_url;
-//     repoItem.target = "_blank";
-//     repoItem.textContent = repo.name;
-//     repoItem.style.color = "blue";
-
-//     reposContainer.appendChild(repoItem);
-//   });
-// }
 
 //* Function to add repos to the user profile after getting (it)them. customize version 2
 function addReposToUserProfile(repos) {
@@ -200,7 +156,7 @@ async function getRepoReadme(repo, OWNER) {
     repoReadme.appendChild(linkToReadme);
     reposContainer.appendChild(repoReadme);
     profile.appendChild(reposContainer);
-  } catch (err) {
+  } catch (err) { //* catch 404 error
     if (err.response.status === 404) {
       console.log(
         `The repository  ${repo.name} of user ${OWNER} dont have readme file`
@@ -250,6 +206,7 @@ async function getRepoReadme(repo, OWNER) {
       reposContainer.appendChild(repoReadme);
       profile.appendChild(reposContainer);
     } else if (err.response.status === 403) {
+      //* catch 403 error
       showError(err, `ressource  forbidden: X-rate-limit exceeded`);
     }
   }
