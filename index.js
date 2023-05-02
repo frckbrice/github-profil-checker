@@ -1,4 +1,4 @@
-//* a variable APIURL to easy the use
+//* a variable APIURL for easy  reuse
 const APIURL = "https://api.github.com/users/";
 
 
@@ -27,7 +27,6 @@ async function getUser(username) {
     const { data } = await axios(APIURL + username);
     createUserProfile(data);
     getRepositories(username);
-    console.log(data);
   } catch (err) {
     //to handle only the not found error
     if (err.response.status === 404) {
@@ -87,9 +86,7 @@ function addReposToUserProfile(repos) {
   const OWNER = search.value.toString().trim();
   if (OWNER) {
     repos.forEach((repo) => {
-      console.log("this is the repo", repo);
       getRepoReadme(repo, OWNER);
-      console.log("after calling of the repo");
     });
   } else {
     alert("No Empty username allowed");
@@ -98,12 +95,10 @@ function addReposToUserProfile(repos) {
 
 //* function to fetch readme file for the given repository
 async function getRepoReadme(repo, OWNER) {
-  console.log("in the getRepoReadme function");
   try {
     const { data } = await axios(
       `https://api.github.com/repos/${OWNER}/${repo.name}/readme`
     );
-    console.log("in the getRepoReadme function", data);
     const reposContainer = document.createElement("div");
     reposContainer.className = "div-for-repos";
 
@@ -143,8 +138,6 @@ async function getRepoReadme(repo, OWNER) {
     reposContainer.appendChild(spanContainer);
     reposContainer.appendChild(repoUrl);
 
-    console.log("starting level of readme");
-
     //* call of the readme file from {data} object which is a property of readme object
     const repoReadme = document.createElement("p");
     repoReadme.className = "view-readme";
@@ -156,11 +149,11 @@ async function getRepoReadme(repo, OWNER) {
     repoReadme.appendChild(linkToReadme);
     reposContainer.appendChild(repoReadme);
     profile.appendChild(reposContainer);
-  } catch (err) { //* catch 404 error
+    
+  } catch (err) {
+    //* catch 404 error
     if (err.response.status === 404) {
-      console.log(
-        `The repository  ${repo.name} of user ${OWNER} dont have readme file`
-      );
+ 
       const reposContainer = document.createElement("div");
       reposContainer.className = "div-for-repos";
 
@@ -205,6 +198,7 @@ async function getRepoReadme(repo, OWNER) {
       reposContainer.appendChild(repoUrl);
       reposContainer.appendChild(repoReadme);
       profile.appendChild(reposContainer);
+      
     } else if (err.response.status === 403) {
       //* catch 403 error
       showError(err, `ressource  forbidden: X-rate-limit exceeded`);
