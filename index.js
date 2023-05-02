@@ -8,8 +8,8 @@ const search = document.querySelector(".searchinput");
 const profile = document.querySelector("#section2");
 
 //* add events
-// form.addEventListener("keyup", submitFn);
-form.addEventListener("submit", submitFn);
+form.addEventListener("keyup", submitFn);
+// form.addEventListener("submit", submitFn);
 
 //* a function that fires the search process for non empty username
 function submitFn(e) {
@@ -201,7 +201,7 @@ async function getRepoReadme(repo, OWNER) {
       
     } else if (err.response.status === 403) {
       //* catch 403 error
-      console(err, `ressource  forbidden: X-rate-limit exceeded`);
+      console.error(err, `ressource  forbidden: X-rate-limit exceeded`);
     }
   }
 }
