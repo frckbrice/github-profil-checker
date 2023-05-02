@@ -201,7 +201,7 @@ async function getRepoReadme(repo, OWNER) {
       
     } else if (err.response.status === 403) {
       //* catch 403 error
-      showError(err, `ressource  forbidden: X-rate-limit exceeded`);
+      console(err, `ressource  forbidden: X-rate-limit exceeded`);
     }
   }
 }
