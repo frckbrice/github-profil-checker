@@ -8,8 +8,8 @@ const search = document.querySelector(".searchinput");
 const profile = document.querySelector("#section2");
 
 //* add events
-form.addEventListener("keyup", submitFn);
-// form.addEventListener("submit", submitFn);
+// form.addEventListener("keyup", submitFn);
+form.addEventListener("submit", submitFn);
 
 //* a function that fires the search process for non empty username
 function submitFn(e) {
