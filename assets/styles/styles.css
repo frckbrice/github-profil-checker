@@ -6,17 +6,30 @@
 
 body {
   font-family: Roboto, sans-serif;
-  background-color: #212529;
-  color: aliceblue;
+  background-color: rgb(15 23 31);
+  color: #212529;
   height: 100vh;
-  overflow: auto;
+  overflow: scroll;
   margin: 10%;
+}
+
+.main {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+h5 {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  font-style: italic;
+  color: #a9abad;
+  font-size: 10px;
 }
 
 .usernameform {
   width: 100%;
-  /* max-width: 800px; */
-  color: rgb(255 255 255);
   font-weight: 500;
   margin-top: 10px;
 }
@@ -30,15 +43,18 @@ body {
   margin-bottom: 2rem;
   font-family: inherit;
   font-size: 1rem;
+  background-color: #123350;
+  color: #fff;
 }
 
 .label-for-input {
   font-size: large;
   font-weight: bold;
+  color: #6c757d;
 }
 
 .searchinput::placeholder {
-  color: rgb(66 85 85);
+  color: #6c757d;
 }
 
 .searchinput:focus {
@@ -46,15 +62,18 @@ body {
 }
 
 .profil-info {
-  max-width: 800px;
-  background: #212529;
+  width: 100%;
+  background: #123350;
   border-radius: 20px;
-  box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05),
-    0 15px 40px rgba(0 0 0 / 10%);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   display: flex;
-  padding: 0 1em;
+  padding: 2rem 1em;
   margin: 2rem 0;
   align-items: center;
+}
+
+.profil {
+  color: #fff;
 }
 
 .avatar2 {
@@ -77,6 +96,58 @@ body {
   margin-bottom: 2%;
 }
 
+.repo {
+  margin: 30px 0;
+  padding: 20px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.repo-name {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.repo-description {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.stars {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.view-readme {
+  font-size: 14px;
+  text-decoration: underline;
+  color: #4885ed;
+  cursor: pointer;
+}
+
+a {
+  color: #0d6efd;
+  text-decoration: underline;
+}
+
+.div-for-repos {
+  width: 100%;
+  background: #123350;
+  border-radius: 20px;
+  box-shadow: 0 19px 38px rgba(0 0 0/ 30%), 0 15px 12px rgba(0 0 0/ 22%);
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  padding: 2rem 2em;
+  margin: 2rem 0;
+  color: #fff;
+}
+
+.repo-url {
+  font-size: 14px;
+  cursor: pointer;
+  font-style: italic;
+}
+
 .info-followers-repos {
   margin: 3% 0;
   display: flex;
@@ -85,7 +156,7 @@ body {
 }
 
 .info-followers-repos p {
- margin-right: 10px;
+  margin-right: 10px;
 }
 
 .info-followers-repos p strong {
@@ -96,10 +167,13 @@ body {
   text-decoration: none;
   color: aliceblue;
   font-size: 1rem;
-  background-color: #212529;
   padding: 10px 0;
   margin: auto 0.5rem 0.5rem auto;
   display: inline-block;
+}
+
+.repos-link:visited {
+  color: blueviolet;
 }
 
 @media screen and (max-width: 425px) {
