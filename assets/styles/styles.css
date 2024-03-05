@@ -6,7 +6,7 @@
 
 body {
   font-family: Roboto, sans-serif;
-  background-color: aliceblue;
+  background-color: rgb(15 23 31);
   color: #212529;
   height: 100vh;
   overflow: scroll;
@@ -24,14 +24,12 @@ h5 {
   top: 2vh;
   right: 2vw;
   font-style: italic;
-  color: #123350;
+  color: #a9abad;
   font-size: 10px;
 }
 
 .usernameform {
   width: 100%;
-  /* max-width: 800px; */
-  /* color: rgb(255 255 255); */
   font-weight: 500;
   margin-top: 10px;
 }
@@ -52,6 +50,7 @@ h5 {
 .label-for-input {
   font-size: large;
   font-weight: bold;
+  color: #6c757d;
 }
 
 .searchinput::placeholder {
@@ -106,7 +105,6 @@ h5 {
 .repo-name {
   font-size: 20px;
   font-weight: 700;
-  /* text-decoration: underline; */
 }
 
 .repo-description {
@@ -135,13 +133,12 @@ a {
   width: 100%;
   background: #123350;
   border-radius: 20px;
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 19px 38px rgba(0 0 0/ 30%), 0 15px 12px rgba(0 0 0/ 22%);
   display: flex;
   flex-direction: column;
   row-gap: 0.5em;
   padding: 2rem 2em;
   margin: 2rem 0;
-  /* align-items: center; */
   color: #fff;
 }
 
@@ -170,7 +167,6 @@ a {
   text-decoration: none;
   color: aliceblue;
   font-size: 1rem;
-  /* background-color: #212529; */
   padding: 10px 0;
   margin: auto 0.5rem 0.5rem auto;
   display: inline-block;
