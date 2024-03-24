@@ -29,7 +29,7 @@ go to the your specific folder and enter following:
 
 ## Live Site
 
-[Link](https://frckbrice.github.io/github-profil-checker/)
+[https://frckbrice.github.io](https://frckbrice.github.io/github-profil-checker/)
 
 ## Author
 
