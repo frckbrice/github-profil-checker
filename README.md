@@ -2,7 +2,7 @@
 
 ## App
 
-![home](./assets/images/cashreg.png)
+![home](assets/images/home-page.png)
 
 ## About
 
